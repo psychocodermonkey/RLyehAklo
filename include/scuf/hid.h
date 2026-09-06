@@ -10,6 +10,18 @@
 
 #include <linux/hid.h>
 
+struct scufHidModel
+{
+  int (*inputMapping)(struct hid_device *hdev,
+                      struct hid_input *hidinput,
+                      struct hid_field *field,
+                      struct hid_usage *usage,
+                      unsigned long **bit,
+                      int *max);
+};
+
+extern const struct scufHidModel scufEnvisionProV2HidModel;
+
 #endif /* __KERNEL__ */
 
 #endif /* RLYEH_AKLO_SCUF_HID_H */

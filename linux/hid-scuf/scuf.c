@@ -1,16 +1,32 @@
 // SPDX-FileCopyrightText: 2026 A.D. (PsychoCoderMonkey) <andrew.dixon@rlyeh.dev>
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include <linux/hid.h>
 #include <linux/module.h>
 
-#define USB_VENDOR_ID_CORSAIR            0x1b1c
-#define USB_DEVICE_ID_SCUF_ENVISION_V2   0x3a05
+#include <scuf/envision.h>
+#include <scuf/hid.h>
 
-static int scufProbe(struct hid_device *hdev,
-                     const struct hid_device_id *id)
-{
+static int scufInputMapping(struct hid_device *hdev,
+                            struct hid_input *hidinput,
+                            struct hid_field *field,
+                            struct hid_usage *usage,
+                            unsigned long **bit,
+                            int *max) {
+  const struct scufHidModel *model;
+
+  model = hid_get_drvdata(hdev);
+  if (!model || !model->inputMapping)
+    return 0;
+
+  return model->inputMapping(hdev, hidinput, field, usage, bit, max);
+}
+
+static int scufProbe(struct hid_device *hdev, const struct hid_device_id *id) {
+  const struct scufHidModel *model;
   int ret;
+
+  model = (const struct scufHidModel *)id->driver_data;
+  hid_set_drvdata(hdev, (void *)model);
 
   ret = hid_parse(hdev);
   if (ret)
@@ -23,16 +39,16 @@ static int scufProbe(struct hid_device *hdev,
   return 0;
 }
 
-static void scufRemove(struct hid_device *hdev)
-{
+static void scufRemove(struct hid_device *hdev) {
   hid_hw_stop(hdev);
 }
 
 static const struct hid_device_id scufDevices[] = {
-  { HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR,
-                   USB_DEVICE_ID_SCUF_ENVISION_V2) },
-  { }
+  {HID_USB_DEVICE(SCUF_USB_VENDOR_ID, SCUF_ENVISION_PRO_V2_PRODUCT_ID),
+   .driver_data = (kernel_ulong_t)&scufEnvisionProV2HidModel},
+  {}
 };
+
 MODULE_DEVICE_TABLE(hid, scufDevices);
 
 static struct hid_driver scufDriver = {
@@ -40,6 +56,7 @@ static struct hid_driver scufDriver = {
   .id_table = scufDevices,
   .probe = scufProbe,
   .remove = scufRemove,
+  .input_mapping = scufInputMapping,
 };
 
 module_hid_driver(scufDriver);

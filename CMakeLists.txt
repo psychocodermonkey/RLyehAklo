@@ -24,7 +24,7 @@ target_include_directories(RLyehAklo INTERFACE
 
 target_sources(RLyehAklo INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/scuf/scuf.h>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/scuf/envision-v2.h>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/scuf/envision.h>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/scuf/hid.h>
 )
 
@@ -88,9 +88,9 @@ if(RLYEH_AKLO_BUILD_LINUX_KERNEL_MODULE)
     DEPENDS
       linux/hid-scuf/Kbuild
       linux/hid-scuf/scuf.c
-      linux/hid-scuf/scuf-envision-v2.c
+      linux/hid-scuf/scuf-envision.c
       include/scuf/scuf.h
-      include/scuf/envision-v2.h
+      include/scuf/envision.h
       include/scuf/hid.h
     COMMENT "Building rlyeh-scuf.ko"
     VERBATIM
