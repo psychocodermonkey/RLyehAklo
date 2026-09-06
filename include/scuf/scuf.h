@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2026 A.D. (PsychoCoderMonkey) <andrew.dixon@rlyeh.dev>
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 #ifndef RLYEH_AKLO_SCUF_H
 #define RLYEH_AKLO_SCUF_H
