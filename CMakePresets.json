@@ -1,0 +1,45 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}"
+    },
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
+        "RLYEH_AKLO_BUILD_LINUX_KERNEL_MODULE": "ON"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "displayName": "Linux Kernel Module (Debug)",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "RLYEH_AKLO_STRIP_LINUX_KERNEL_MODULE": "OFF"
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Kernel Module (Release)",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "RLYEH_AKLO_STRIP_LINUX_KERNEL_MODULE": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release"
+    }
+  ]
+}

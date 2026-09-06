@@ -1,0 +1,4 @@
+obj-m += rlyeh-scuf.o
+rlyeh-scuf-y := scuf.o scuf-envision-v2.o
+
+ccflags-y += -I$(src)/../../include
