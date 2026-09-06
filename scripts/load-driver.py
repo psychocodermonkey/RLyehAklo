@@ -4,7 +4,7 @@
 
 """Load, unload, or report the state of the development kernel module.
 
-The script operates on ``build/linux-debug/bin/rlyeh-scuf.ko``. It does not
+The script operates on ``build/debug-linux/bin/rlyeh-scuf.ko``. It does not
 build or sign the module and does not invoke ``sudo`` internally.
 
 Usage:
@@ -22,7 +22,7 @@ from pathlib import Path
 
 
 MODULE_NAME = "rlyeh_scuf"
-MODULE_RELATIVE_PATH = Path("build/linux-debug/bin/rlyeh-scuf.ko")
+MODULE_RELATIVE_PATH = Path("build/debug-linux/bin/rlyeh-scuf.ko")
 MODULE_SYSFS_PATH = Path("/sys/module") / MODULE_NAME
 
 

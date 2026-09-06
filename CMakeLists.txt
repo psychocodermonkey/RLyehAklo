@@ -59,8 +59,8 @@ if(RLYEH_AKLO_BUILD_LINUX_KERNEL_MODULE)
 
   find_program(RLYEH_AKLO_MAKE_EXECUTABLE NAMES make REQUIRED)
 
-  set(_linux_module_source_dir "${CMAKE_CURRENT_SOURCE_DIR}/linux/hid-scuf")
-  set(_linux_module_working_dir "${CMAKE_CURRENT_BINARY_DIR}/linux/hid-scuf")
+  set(_linux_module_source_dir "${CMAKE_CURRENT_SOURCE_DIR}/linux/scuf")
+  set(_linux_module_working_dir "${CMAKE_CURRENT_BINARY_DIR}/linux/scuf")
   set(_linux_module_output_dir "${CMAKE_CURRENT_BINARY_DIR}/bin")
   set(_linux_module_built
       "${_linux_module_working_dir}/rlyeh-scuf.ko")
@@ -86,9 +86,9 @@ if(RLYEH_AKLO_BUILD_LINUX_KERNEL_MODULE)
             "${_linux_module_built}" "${_linux_module}"
     ${_linux_module_strip_command}
     DEPENDS
-      linux/hid-scuf/Kbuild
-      linux/hid-scuf/scuf.c
-      linux/hid-scuf/scuf-envision.c
+      linux/scuf/Kbuild
+      linux/scuf/scuf.c
+      linux/scuf/envision.c
       include/scuf/scuf.h
       include/scuf/envision.h
       include/scuf/hid.h

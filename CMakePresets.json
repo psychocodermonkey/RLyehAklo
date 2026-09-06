@@ -16,7 +16,7 @@
       }
     },
     {
-      "name": "linux-debug",
+      "name": "debug-linux",
       "displayName": "Linux Kernel Module (Debug)",
       "inherits": "linux-base",
       "cacheVariables": {
@@ -24,7 +24,7 @@
       }
     },
     {
-      "name": "linux-release",
+      "name": "release-linux",
       "displayName": "Linux Kernel Module (Release)",
       "inherits": "linux-base",
       "cacheVariables": {
@@ -34,12 +34,12 @@
   ],
   "buildPresets": [
     {
-      "name": "linux-debug",
-      "configurePreset": "linux-debug"
+      "name": "debug-linux",
+      "configurePreset": "debug-linux"
     },
     {
-      "name": "linux-release",
-      "configurePreset": "linux-release"
+      "name": "release-linux",
+      "configurePreset": "release-linux"
     }
   ]
 }

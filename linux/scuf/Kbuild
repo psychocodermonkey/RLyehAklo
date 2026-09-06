@@ -1,4 +1,4 @@
 obj-m += rlyeh-scuf.o
-rlyeh-scuf-y := scuf.o scuf-envision.o
+rlyeh-scuf-y := scuf.o envision.o
 
 ccflags-y += -I$(src)/../../include

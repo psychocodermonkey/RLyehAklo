@@ -22,8 +22,8 @@ Fedora systems using akmods normally keep their signing material at:
 Those paths are detected automatically. After confirming the akmods
 certificate is enrolled, build and sign with:
 
-  cmake --build --preset linux-debug
-  sudo scripts/sign_kernel_modules.py linux-debug
+  cmake --build --preset debug-linux
+  sudo scripts/sign_kernel_modules.py debug-linux
 
 Debian
 ------
@@ -37,13 +37,13 @@ the pair with ``sudo dkms generate_mok``. The public certificate must then be
 enrolled according to the distribution's Secure Boot procedure. Once it is
 enrolled, build and sign with:
 
-  cmake --build --preset linux-debug
-  sudo scripts/sign_kernel_modules.py linux-debug
+  cmake --build --preset debug-linux
+  sudo scripts/sign_kernel_modules.py debug-linux
 
 If DKMS is configured with different ``mok_signing_key`` or ``mok_certificate``
 paths, pass those paths explicitly:
 
-  sudo scripts/sign_kernel_modules.py linux-debug \
+  sudo scripts/sign_kernel_modules.py debug-linux \
     --private-key /path/to/mok.key \
     --certificate /path/to/mok.der
 
@@ -53,8 +53,8 @@ Arch does not define one universal out-of-tree module-signing key location.
 The installed kernel headers must provide ``scripts/sign-file``, and the key's
 certificate must be trusted by the running kernel. Pass the configured paths:
 
-  cmake --build --preset linux-debug
-  sudo scripts/sign_kernel_modules.py linux-debug \
+  cmake --build --preset debug-linux
+  sudo scripts/sign_kernel_modules.py debug-linux \
     --private-key /path/to/signing_key.pem \
     --certificate /path/to/signing_key.x509
 

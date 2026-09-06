@@ -28,6 +28,8 @@ static int scufProbe(struct hid_device *hdev, const struct hid_device_id *id) {
   model = (const struct scufHidModel *)id->driver_data;
   hid_set_drvdata(hdev, (void *)model);
 
+  hdev->quirks |= HID_QUIRK_INPUT_PER_APP;
+
   ret = hid_parse(hdev);
   if (ret)
     return ret;
