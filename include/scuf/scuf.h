@@ -4,6 +4,11 @@
 #ifndef RLYEH_AKLO_SCUF_H
 #define RLYEH_AKLO_SCUF_H
 
+/*
+ * Manufacturer identity is portable hardware knowledge. Keep product IDs in
+ * their controller-family headers so drivers and other consumers do not grow
+ * separate, potentially conflicting device-ID lists.
+ */
 #define SCUF_USB_VENDOR_ID 0x1b1c
 
 #endif /* RLYEH_AKLO_SCUF_H */

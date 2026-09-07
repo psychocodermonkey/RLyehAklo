@@ -10,6 +10,12 @@ static int scufEnvisionProV2AxisMapping(struct hid_input *hidinput,
                                         struct hid_usage *usage,
                                         unsigned long **bit,
                                         int *max) {
+  /*
+   * Generic HID already maps the left stick, hat, and their ranges correctly.
+   * Only the usages whose default Linux axis identities are wrong belong here.
+   * Mapping every axis would make this driver responsible for working parser
+   * behavior and make descriptor changes harder to detect.
+   */
   switch (usage->hid & HID_USAGE)
   {
     case SCUF_ENVISION_PRO_V2_RIGHT_STICK_X:
@@ -39,6 +45,14 @@ static int scufEnvisionProV2ButtonMapping(struct hid_input *hidinput,
                                           int *max) {
   int code;
 
+  /*
+   * Linux's historical BTN_X alias is BTN_NORTH. The Envision uses the
+   * Xbox-style ABXY convention, so this intentionally differs from the
+   * physical west position. SDL uses this convention for non-Sony pads.
+   *
+   * Oddly, only X and Y are reversed relative to the physical button layout;
+   * A and B already match the expected Linux mappings.
+   */
   switch (usage->hid & HID_USAGE)
   {
     case SCUF_ENVISION_PRO_V2_BUTTON_A:
@@ -101,9 +115,20 @@ static int scufEnvisionProV2InputMapping(struct hid_device *hdev,
                                          int *max) {
   (void)hdev;
 
+  /*
+   * Interface 3 also carries vendor-defined reports. The standard gamepad
+   * report is the only report whose layout has been verified for remapping;
+   * all other reports must retain generic HID handling until their purpose is
+   * established.
+   */
   if (field->report->id != SCUF_ENVISION_PRO_V2_GAMEPAD_REPORT_ID)
     return 0;
 
+  /*
+   * Returning zero preserves HID core's default mapping. This is intentional
+   * for unsupported pages and unrecognized button usages, including controls
+   * whose independent behavior has not been verified.
+   */
   switch (usage->hid & HID_USAGE_PAGE)
   {
     case HID_UP_GENDESK:

@@ -22,6 +22,9 @@ from pathlib import Path
 
 
 MODULE_NAME = "rlyeh_scuf"
+# This intentionally targets the debug preset's direct build artifact. Using
+# insmod keeps bring-up isolated from the system module tree, depmod state, and
+# persistent boot configuration; packaging/install workflows are separate.
 MODULE_RELATIVE_PATH = Path("build/debug-linux/bin/rlyeh-scuf.ko")
 MODULE_SYSFS_PATH = Path("/sys/module") / MODULE_NAME
 
@@ -37,6 +40,8 @@ def parse_arguments() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
 
 
 def is_loaded() -> bool:
+  # sysfs reflects the kernel's authoritative module state and avoids parsing
+  # presentation-oriented command output such as lsmod.
   return MODULE_SYSFS_PATH.is_dir()
 
 
@@ -53,6 +58,9 @@ def require_command(command: str) -> str:
 
 
 def load_module(project_root: Path) -> None:
+  # Repeated development commands should preserve the currently tested module
+  # rather than replacing it implicitly. Rebuild, sign, unload, then load to
+  # make an intentional transition to a new artifact.
   if is_loaded():
     print(f"{MODULE_NAME} is already loaded")
     return
@@ -69,6 +77,8 @@ def load_module(project_root: Path) -> None:
 
 
 def unload_module() -> None:
+  # An unloaded module restores the normal HID-driver binding path, which is
+  # the recovery mechanism during hardware bring-up.
   if not is_loaded():
     print(f"{MODULE_NAME} is already unloaded")
     return

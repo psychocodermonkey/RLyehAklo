@@ -6,9 +6,15 @@
 
 #include "scuf.h"
 
+/* Identity and report selection observed on the wired Envision Pro V2 only. */
 #define SCUF_ENVISION_PRO_V2_PRODUCT_ID 0x3a05
 #define SCUF_ENVISION_PRO_V2_GAMEPAD_REPORT_ID 0x06
 
+/*
+ * These are HID Generic Desktop usage values, not Linux input codes. Keeping
+ * the descriptor vocabulary portable lets each platform map the same verified
+ * physical controls according to its own input API.
+ */
 enum scufEnvisionProV2GenericDesktopUsage
 {
   SCUF_ENVISION_PRO_V2_LEFT_STICK_X = 0x30,
@@ -20,6 +26,7 @@ enum scufEnvisionProV2GenericDesktopUsage
   SCUF_ENVISION_PRO_V2_HAT_SWITCH = 0x39,
 };
 
+/* Descriptor logical ranges; revise only from captured hardware evidence. */
 #define SCUF_ENVISION_PRO_V2_STICK_AXIS_MIN (-32768)
 #define SCUF_ENVISION_PRO_V2_STICK_AXIS_MAX 32767
 
@@ -30,6 +37,12 @@ enum scufEnvisionProV2GenericDesktopUsage
 #define SCUF_ENVISION_PRO_V2_HAT_SWITCH_MAX 7
 #define SCUF_ENVISION_PRO_V2_HAT_SWITCH_HAS_NULL_STATE 1
 
+/*
+ * Only buttons 1 through 11 have verified, stable physical identities. The
+ * descriptor exposes additional button usages, but they intentionally remain
+ * unnamed until their independent behavior is established rather than being
+ * inferred from configurable onboard mappings.
+ */
 enum scufEnvisionProV2ButtonUsage
 {
   SCUF_ENVISION_PRO_V2_BUTTON_A = 1,

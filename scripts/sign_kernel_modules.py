@@ -73,6 +73,9 @@ import sys
 from pathlib import Path
 
 SIGNING_KEY_CANDIDATES = (
+  # Preserve this order: a Fedora akmods installation may coexist with DKMS,
+  # and automatic signing must select a predictable local policy. Custom key
+  # material is always explicit rather than inferred from arbitrary files.
   (
     "akmods",
     Path("/etc/pki/akmods/private/private_key.priv"),
@@ -120,6 +123,9 @@ def require_file(path: Path, description: str) -> None:
 
 
 def find_signing_material(arguments: argparse.Namespace) -> tuple[Path, Path]:
+  # A key without its matching certificate cannot produce a loadable module.
+  # Requiring the pair also prevents a partly specified override from silently
+  # falling back to an unrelated distribution-managed key.
   if (arguments.private_key is None) != (arguments.certificate is None):
     raise RuntimeError("--private-key and --certificate must be provided together")
 
@@ -144,6 +150,9 @@ def find_signing_material(arguments: argparse.Namespace) -> tuple[Path, Path]:
 def main() -> int:
   arguments = parse_arguments()
 
+  # Presets name build-owned output directories. Reject path-like input so this
+  # development tool cannot be repurposed accidentally to sign arbitrary files
+  # outside the project's CMake artifact layout.
   if Path(arguments.preset).name != arguments.preset or arguments.preset in {".", ".."}:
     raise RuntimeError("preset must be a single directory name")
 
@@ -190,6 +199,9 @@ def main() -> int:
       text=True,
     )
     signer = result.stdout.strip()
+    # sign-file succeeding only reports that it ran. Inspect the resulting
+    # module so a missing signature is caught before a later Secure Boot load
+    # attempt.
     if not signer:
       raise RuntimeError(f"module has no signer after signing: {module}")
     print(f"Signed by {signer}")

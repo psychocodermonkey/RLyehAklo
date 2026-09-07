@@ -1,4 +1,10 @@
 obj-m += rlyeh-scuf.o
+
+# One driver module combines shared SCUF HID handling with per-controller
+# models. Adding a controller should normally add a model source and a device
+# table entry, rather than duplicate the driver lifecycle.
 rlyeh-scuf-y := scuf.o envision.o
 
+# Hardware definitions remain under the project-wide include hierarchy so
+# platform implementations and non-kernel consumers share one source of truth.
 ccflags-y += -I$(src)/../../include

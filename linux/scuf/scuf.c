@@ -14,6 +14,11 @@ static int scufInputMapping(struct hid_device *hdev,
                             int *max) {
   const struct scufHidModel *model;
 
+  /*
+   * Device-specific behavior is selected from the matched ID entry. This
+   * keeps the common driver responsible for HID lifecycle only; each model
+   * decides which verified usages require intervention.
+   */
   model = hid_get_drvdata(hdev);
   if (!model || !model->inputMapping)
     return 0;
@@ -28,6 +33,12 @@ static int scufProbe(struct hid_device *hdev, const struct hid_device_id *id) {
   model = (const struct scufHidModel *)id->driver_data;
   hid_set_drvdata(hdev, (void *)model);
 
+  /*
+   * The Envision descriptor contains separate application collections. Keep
+   * their input devices separate so vendor usages cannot leak into the
+   * gamepad evdev device. This must be set before parsing, when HID creates
+   * those input devices.
+   */
   hdev->quirks |= HID_QUIRK_INPUT_PER_APP;
 
   ret = hid_parse(hdev);
@@ -46,6 +57,11 @@ static void scufRemove(struct hid_device *hdev) {
 }
 
 static const struct hid_device_id scufDevices[] = {
+  /*
+   * The model pointer is deliberately table data, not probe-time identity
+   * logic. A future SCUF controller can share this driver's lifecycle while
+   * supplying only its own verified input policy.
+   */
   {HID_USB_DEVICE(SCUF_USB_VENDOR_ID, SCUF_ENVISION_PRO_V2_PRODUCT_ID),
    .driver_data = (kernel_ulong_t)&scufEnvisionProV2HidModel},
   {}
